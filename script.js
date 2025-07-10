@@ -5,15 +5,37 @@ let playerX = 180;
 let score = 0;
 let gameInterval;
 
-document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowLeft" && playerX > 0) {
-    playerX -= 20;
-  } else if (e.key === "ArrowRight" && playerX < 360) {
-    playerX += 20;
-  }
-  player.style.left = playerX + "px";
+// Set initial player position
+player.style.left = playerX + "px";
+
+// 🟢 Drag-to-Move on Touchscreens
+let isDragging = false;
+
+game.addEventListener("touchstart", (e) => {
+  isDragging = true;
+  moveToTouch(e);
 });
 
+game.addEventListener("touchmove", (e) => {
+  if (isDragging) moveToTouch(e);
+});
+
+game.addEventListener("touchend", () => {
+  isDragging = false;
+});
+
+function moveToTouch(e) {
+  const gameRect = game.getBoundingClientRect();
+  const touchX = e.touches[0].clientX - gameRect.left;
+
+  let newX = touchX - player.offsetWidth / 2;
+  newX = Math.max(0, Math.min(game.offsetWidth - player.offsetWidth, newX));
+
+  playerX = newX;
+  player.style.left = playerX + "px";
+}
+
+// 🪨 Asteroid Generator
 function createAsteroid() {
   const asteroid = document.createElement("div");
   asteroid.classList.add("asteroid");
@@ -25,7 +47,7 @@ function createAsteroid() {
     asteroidY += 5;
     asteroid.style.top = asteroidY + "px";
 
-    // Collision Detection
+    // 💥 Collision Detection
     if (
       asteroidY > 520 &&
       parseInt(asteroid.style.left) > playerX - 30 &&
@@ -36,6 +58,7 @@ function createAsteroid() {
       location.reload();
     }
 
+    // Remove asteroid when it goes out of screen
     if (asteroidY > 600) {
       clearInterval(fallInterval);
       asteroid.remove();
@@ -43,11 +66,13 @@ function createAsteroid() {
   }, 30);
 }
 
+// 🔢 Score Updater
 function updateScore() {
   score++;
   scoreDisplay.textContent = "Score: " + score;
 }
 
+// 🕹 Start the Game
 gameInterval = setInterval(() => {
   createAsteroid();
   updateScore();
