@@ -5,6 +5,11 @@
     padding: 0;
     box-sizing: border-box;
 }
+body {
+  margin: 0;
+  overflow: hidden;
+  touch-action: none;
+}
 
 #game {
     font-family: sans-serif;
@@ -16,6 +21,7 @@
 
     margin: 20px auto;
     position: relative;
+    touch-action:none;
     
 }
 
