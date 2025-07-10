@@ -8,7 +8,6 @@
 body {
   margin: 0;
   overflow: hidden;
-  touch-action: none;
 }
 
 #game {
@@ -21,7 +20,6 @@ body {
 
     margin: 20px auto;
     position: relative;
-    touch-action:none;
     
 }
 
